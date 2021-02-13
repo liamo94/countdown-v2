@@ -32,4 +32,8 @@ export const Button = styled.button<{ buttonType?: LinkButtonProps["type"] }>`
       buttonType === "primary" ? "black" : "#ff7676"};
     color: white;
   }
+  &:disabled {
+    cursor: default;
+    background: grey;
+  }
 `;

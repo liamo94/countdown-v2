@@ -13,3 +13,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+::selection {
+  background: #ffb7b7; /* WebKit/Blink Browsers */
+}
+
+button:focus {
+  background-color: #ff7676;
+  color: white;
+}
+
+.altButton {
+  background-color: #ff7676;
+  color: white;
+}
+
+.altButton:hover {
+  background-color: black;
+  color: white;
+}
+
+input:focus {
+  outline: none;
+  border: 1px solid #ff7676;
+}
