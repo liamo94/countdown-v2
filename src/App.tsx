@@ -1,7 +1,8 @@
+import type { FC } from "react";
 import { Routes } from "./routes";
 import styled from "styled-components";
 
-const App = () => (
+const App: FC = () => (
   <Container>
     <Routes />
   </Container>

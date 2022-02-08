@@ -2,7 +2,7 @@ import { FC } from "react";
 import styled from "styled-components";
 import { LinkButton } from "./LinkButton";
 
-export const Countdown = () => {
+export const Countdown: FC = () => {
   const letters = "COUNTDOWN".split("");
   return (
     <Container>

@@ -2,7 +2,7 @@ import { FC } from "react";
 import { LinkProps, NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-interface LinkButtonProps {
+export interface LinkButtonProps {
   to: LinkProps["to"];
   type?: "primary" | "secondary";
 }

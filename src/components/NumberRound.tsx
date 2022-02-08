@@ -1,24 +1,26 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, FC } from "react";
 import styled from "styled-components";
 import { random } from "../utils/random";
+import { useWindowEvent } from "../utils/useWindowEvent";
+import { BackButton } from "./BackButton";
 import { Button } from "./LinkButton";
 
-interface NumberState {
-  value: number;
-  validNumbers: boolean;
-  validInput: boolean;
-  invalidMessage?: string;
-}
+// interface NumberState {
+//   value: number;
+//   validNumbers: boolean;
+//   validInput: boolean;
+//   invalidMessage?: string;
+// }
 
-export const NumberRound = () => {
+export const NumberRound: FC = () => {
   const [randomNumber, setRandomNumber] = useState<number>();
   const [bigNumbers, setBigNumbers] = useState(0);
   const [availableNumbers, setAvailableNumbers] = useState<number[]>([]);
-  const [valid, setValid] = useState<NumberState>({
-    value: 0,
-    validNumbers: true,
-    validInput: true,
-  });
+  // const [valid, setValid] = useState<NumberState>({
+  //   value: 0,
+  //   validNumbers: true,
+  //   validInput: true,
+  // });
 
   useEffect(() => {
     const turns = 20;
@@ -39,35 +41,16 @@ export const NumberRound = () => {
     const totalNumbers = 6;
     const selectedNumbers = [];
     const smallNumbers = [
-      1,
-      1,
-      2,
-      2,
-      3,
-      3,
-      4,
-      4,
-      5,
-      5,
-      6,
-      6,
-      7,
-      7,
-      8,
-      8,
-      9,
-      9,
-      10,
-      10,
+      1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10,
     ];
     const bigNumbers = [25, 50, 75, 100];
     for (let i = 0; i < totalBigNumbers; i++) {
-      let rnd = random(bigNumbers.length);
+      const rnd = random(bigNumbers.length);
       selectedNumbers.push(bigNumbers[rnd]);
       bigNumbers.splice(rnd, 1);
     }
     for (let i = 0; i < totalNumbers - totalBigNumbers; i++) {
-      let rnd = random(smallNumbers.length);
+      const rnd = random(smallNumbers.length);
       selectedNumbers.push(smallNumbers[rnd]);
       smallNumbers.splice(rnd, 1);
     }
@@ -77,39 +60,66 @@ export const NumberRound = () => {
   };
 
   const setAvailableNumber = useCallback((val: number) => {
-    setBigNumbers(val);
     setAvailableNumbers(selectRandomNumbers(val));
+    setBigNumbers(val);
   }, []);
 
+  const handleKeyDown = useCallback(
+    (event) => {
+      if (availableNumbers.length) return;
+      console.log(event.keyCode);
+      switch (event.keyCode) {
+        case 49:
+          setAvailableNumber(1);
+          break;
+        case 50:
+          setAvailableNumber(2);
+          break;
+        case 51:
+          setAvailableNumber(3);
+          break;
+        case 52:
+          setAvailableNumber(4);
+          break;
+      }
+    },
+    [setAvailableNumber, availableNumbers]
+  );
+
+  useWindowEvent("keydown", handleKeyDown);
+
   return (
-    <Container>
-      <h1>Number round</h1>
-      <h2>How many big numbers?</h2>
-      <ButtonContainer>
-        {[1, 2, 3, 4].map((val) => (
-          <BigNumberButton
-            key={val}
-            buttonType="secondary"
-            onClick={() => setAvailableNumber(val)}
-            active={val === bigNumbers}
-          >
-            {val}
-          </BigNumberButton>
-        ))}
-      </ButtonContainer>
-      {bigNumbers > 0 && (
-        <>
-          <Target>{randomNumber}</Target>
-          <h3>Using numbers</h3>
-          <ButtonContainer>
-            {availableNumbers.map((number, i) => (
-              <Number key={i}>{number}</Number>
-            ))}
-          </ButtonContainer>
-          <Input placeholder="Type solution" />
-        </>
-      )}
-    </Container>
+    <>
+      <BackButton route="/select" />
+      <Container>
+        <h1>Number round</h1>
+        <h2>How many big numbers?</h2>
+        <ButtonContainer>
+          {[1, 2, 3, 4].map((val) => (
+            <BigNumberButton
+              key={val}
+              buttonType="secondary"
+              onClick={() => setAvailableNumber(val)}
+              active={val === bigNumbers}
+            >
+              {val}
+            </BigNumberButton>
+          ))}
+        </ButtonContainer>
+        {!!availableNumbers.length && (
+          <>
+            <Target>{randomNumber}</Target>
+            <h3>Using numbers</h3>
+            <ButtonContainer>
+              {availableNumbers.map((number, i) => (
+                <Number key={i}>{number}</Number>
+              ))}
+            </ButtonContainer>
+            <Input placeholder="Type solution" />
+          </>
+        )}
+      </Container>
+    </>
   );
 };
 

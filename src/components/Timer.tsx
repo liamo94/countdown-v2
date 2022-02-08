@@ -7,25 +7,27 @@ interface TimerProps {
   onTimeUp?: () => void;
 }
 
-export const Timer: FC<TimerProps> = ({ initialSeconds, onTimeUp }) => {
-  const DEFAULT_TIME = 30;
-
-  const [seconds, setSeconds] = useState(initialSeconds ?? DEFAULT_TIME);
-  const [colour, setColour] = useState(getRandomColor());
+export const Timer: FC<TimerProps> = ({ initialSeconds = 30, onTimeUp }) => {
+  const [seconds, setSeconds] = useState(initialSeconds);
+  const [colour, setColour] = useState(() => getRandomColor());
+  const [stopped, setStopped] = useState(false);
 
   useEffect(() => {
+    if (stopped) return;
     const intervalId = setInterval(() => {
       if (seconds !== 0) {
-        setSeconds(seconds - 1);
+        setSeconds((s) => s - 1);
         setColour(getRandomColor());
       } else {
-        clearInterval(intervalId);
+        setSeconds(initialSeconds);
         onTimeUp?.();
-        setSeconds(initialSeconds ?? DEFAULT_TIME);
+        clearInterval(intervalId);
+        setStopped(true);
       }
     }, 1000);
-    return () => clearInterval(intervalId);
-  }, [initialSeconds, seconds, onTimeUp]);
+    return () => void clearInterval(intervalId);
+  }, [initialSeconds, onTimeUp, seconds, stopped]);
+
   return (
     <Container border={colour}>
       <p>{seconds}</p>

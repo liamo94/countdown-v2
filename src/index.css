@@ -15,7 +15,7 @@ code {
 }
 
 ::selection {
-  background: #ffb7b7; /* WebKit/Blink Browsers */
+  background: #ff7676; /* WebKit/Blink Browsers */
 }
 
 button:focus {

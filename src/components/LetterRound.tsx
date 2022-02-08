@@ -9,6 +9,7 @@ import { useWindowEvent } from "../utils/useWindowEvent";
 import { getVowels } from "../utils/vowels";
 import { Button } from "./LinkButton";
 import { Input } from "./Input";
+import { BackButton } from "./BackButton";
 
 interface LetterState {
   score: number;
@@ -62,7 +63,7 @@ export const LetterRound: FC = () => {
       const characters = (value ?? input).toUpperCase().split("");
       const userCharacters = [...chosenLetters];
       return characters.every((char) => {
-        if (userCharacters.indexOf(char) < 0) {
+        if (userCharacters.indexOf(char) === -1) {
           return false;
         } else {
           userCharacters.splice(userCharacters.indexOf(char), 1);
@@ -121,56 +122,61 @@ export const LetterRound: FC = () => {
   );
 
   return (
-    <Container>
-      <h1>Letter round</h1>
-      {letterResponse.type === "loading" && <p>Loading...</p>}
-      {letterResponse.type === "error" && (
-        <p>Internet required to play the game</p>
-      )}
-      {letterResponse.type === "ok" && (
-        <>
-          <p>Pick letters</p>
-          <button onClick={reset}>Reset</button>
-          <SquareContainer>
-            <Button buttonType="secondary" onClick={() => letterClicked("v")}>
-              Vowel
-            </Button>
-            <Button buttonType="secondary" onClick={() => letterClicked("c")}>
-              Consonant
-            </Button>
-          </SquareContainer>
-          <small>
-            <b>Tip</b>: Use <b>V</b> and <b>C</b> to add vowels and consonants
-          </small>
-          <SquareContainer>
-            {[...Array(8)].map((e, i) => (
-              <Square key={i}>
-                <Inner>{chosenLetters[i] ?? ""}</Inner>
-              </Square>
-            ))}
-          </SquareContainer>
-          {chosenLetters.length > LETTER_LIMIT && (
-            <Container>
-              <p>Now make a word</p>
-              <Input
-                ref={searchInput}
-                onChange={(event) =>
-                  handleInputChange(event.currentTarget.value)
-                }
-              />
-              {!valid.allValidCharacters && <Error>Character not valid</Error>}
-              <Button
-                onClick={() => isWordValid()}
-                disabled={input === "" || !valid.allValidCharacters}
-              >
-                Submit
+    <>
+      <BackButton route="/select" />
+      <Container>
+        <h1>Letter round</h1>
+        {letterResponse.type === "loading" && <p>Loading...</p>}
+        {letterResponse.type === "error" && (
+          <p>Internet required to play the game</p>
+        )}
+        {letterResponse.type === "ok" && (
+          <>
+            <p>Pick letters</p>
+            <button onClick={reset}>Reset</button>
+            <SquareContainer>
+              <Button buttonType="secondary" onClick={() => letterClicked("v")}>
+                Vowel
               </Button>
-              {points > 0 && <h2>Correct, {points} points</h2>}
-            </Container>
-          )}
-        </>
-      )}
-    </Container>
+              <Button buttonType="secondary" onClick={() => letterClicked("c")}>
+                Consonant
+              </Button>
+            </SquareContainer>
+            <small>
+              <b>Tip</b>: Use <b>V</b> and <b>C</b> to add vowels and consonants
+            </small>
+            <SquareContainer>
+              {[...Array(8)].map((_, i) => (
+                <Square key={i}>
+                  <Inner>{chosenLetters[i] ?? ""}</Inner>
+                </Square>
+              ))}
+            </SquareContainer>
+            {chosenLetters.length > LETTER_LIMIT && (
+              <Container>
+                <p>Now make a word</p>
+                <Input
+                  ref={searchInput}
+                  onChange={(event) =>
+                    handleInputChange(event.currentTarget.value)
+                  }
+                />
+                {!valid.allValidCharacters && (
+                  <Error>Character not valid</Error>
+                )}
+                <Button
+                  onClick={() => isWordValid()}
+                  disabled={!input || !valid.allValidCharacters}
+                >
+                  Submit
+                </Button>
+                {points > 0 && <h2>Correct, {points} points</h2>}
+              </Container>
+            )}
+          </>
+        )}
+      </Container>
+    </>
   );
 };
 
@@ -209,5 +215,7 @@ const Container = styled.div`
 `;
 
 const Error = styled.p`
-  color: red;
+  background: red;
+  padding: 2px;
+  border-radius: 4px;
 `;

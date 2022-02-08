@@ -1,19 +1,14 @@
 export const sum = (e: string[], numbers: number[]) => {
   const s: number[] = [];
-  for (let num of e) {
-    if (
-      !isNaN(+num) &&
-      numbers.indexOf(+num) === -1 &&
-      num !== "" &&
-      num !== " "
-    ) {
+  for (const num of e) {
+    if (!isNaN(+num) && numbers.indexOf(+num) === -1 && num && num !== " ") {
       return "Number not available";
     }
-    if (num !== "" && num !== " " && !isNaN(+num)) {
+    if (num && num !== " " && !isNaN(+num)) {
       numbers.splice(numbers.indexOf(+num), 1);
     }
   }
-  for (let i of e) {
+  for (const i of e) {
     const t = i;
     if (!isNaN(+t)) s.push(+t);
     else {
@@ -51,7 +46,7 @@ export const infixToPostfix = (input: string) => {
   const opsStack: string[] = [];
   const postfix: string[] = [];
 
-  for (let token of infix) {
+  for (const token of infix) {
     if (!isNaN(+token)) {
       postfix.push(token);
       continue;

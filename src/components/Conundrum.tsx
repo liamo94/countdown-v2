@@ -1,14 +1,18 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, FC } from "react";
 import styled from "styled-components";
 import { conundrum } from "../utils/conundrum";
 import { random } from "../utils/random";
+import { BackButton } from "./BackButton";
 import { Input } from "./Input";
 import { Timer } from "./Timer";
 
-export const Conundrum = () => {
-  const [word, setWord] = useState<
-    { original: string; scrambledWord: string } | undefined
-  >(undefined);
+interface ConundrumWord {
+  original: string;
+  scrambledWord: string;
+}
+
+export const Conundrum: FC = () => {
+  const [word, setWord] = useState<ConundrumWord | undefined>(undefined);
 
   const [found, setFound] = useState(false);
   const [attempted, setAttempted] = useState(false);
@@ -47,21 +51,25 @@ export const Conundrum = () => {
   );
 
   return (
-    <Container>
-      <h1>Conundrum round</h1>
-      <p>Unscramble word</p>
-      {word && (
-        <>
-          <Word>{word.scrambledWord.toUpperCase()}</Word>
-          <Input
-            maxLength={9}
-            onChange={(event) => checkWord(event.currentTarget.value)}
-          />
-          {attempted && <p>{found ? "Correct" : "Incorrect"}</p>}
-        </>
-      )}
-      <Timer />
-    </Container>
+    <>
+      <BackButton route="/select" />
+      <Container>
+        <h1>Conundrum round</h1>
+        <p>Unscramble word</p>
+        {word && (
+          <>
+            <Word>{word.scrambledWord.toUpperCase()}</Word>
+            <Input
+              maxLength={9}
+              onChange={(event) => checkWord(event.currentTarget.value)}
+            />
+            {attempted && <p>{found ? "Correct" : "Incorrect"}</p>}
+            {word.original}
+          </>
+        )}
+        <Timer />
+      </Container>
+    </>
   );
 };
 
