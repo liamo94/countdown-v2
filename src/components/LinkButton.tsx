@@ -37,7 +37,7 @@ export const Button = styled.button<{ buttonType?: LinkButtonProps["type"] }>`
     background: grey;
   }
 
-  /* @media screen and (max-width: 400px) {
+  /* @media screen and (max-width: 431px) {
     position: fixed;
     top: 0%;
   } */

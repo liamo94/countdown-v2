@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Input = styled.input`
   padding: 8px;
-  width: 400px;
+  width: 431px;
   font-size: calc(20px + 2vmin);
   border-radius: 22px;
   padding: 4px 16px;
@@ -11,7 +11,7 @@ export const Input = styled.input`
   box-shadow: 15px 15px 50px rgba(0, 0, 0, 0.5);
   border: 1px solid white;
   text-transform: uppercase;
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 431px) {
     width: 85%;
     padding: 16px;
     margin: 0;

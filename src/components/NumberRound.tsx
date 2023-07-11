@@ -67,7 +67,6 @@ export const NumberRound: FC = () => {
   const handleKeyDown = useCallback(
     (event: any) => {
       if (availableNumbers.length) return;
-      console.log(event.keyCode);
       switch (event.keyCode) {
         case 49:
           setAvailableNumber(1);
@@ -129,7 +128,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding-top: 16px;
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 431px) {
     padding-top: 32px;
   }
 `;
@@ -175,7 +174,7 @@ const Input = styled.input`
   border: none;
   box-shadow: 15px 15px 50px rgba(0, 0, 0, 0.5);
   border: 1px solid white;
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 431px) {
     width: 85%;
     padding: 16px;
     margin: 0%;

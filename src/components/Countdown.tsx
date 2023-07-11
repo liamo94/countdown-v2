@@ -52,7 +52,7 @@ const StyledLetter = styled.div`
     -ms-transform: scale(1.1);
     transform: scale(1.1);
   }
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 431px) {
     padding: 4px;
   }
 `;
@@ -79,5 +79,8 @@ const CodeLink = styled.a`
   text-decoration: none;
   @media screen and (min-width: 500px) {
     font-size: 16px;
+  }
+  &:hover {
+    opacity: 0.8;
   }
 `;

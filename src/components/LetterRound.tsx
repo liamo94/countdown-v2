@@ -170,6 +170,7 @@ export const LetterRound: FC = () => {
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     handleInputChange(event.currentTarget.value)
                   }
+                  maxLength={8}
                 />
                 {!valid.allValidCharacters && (
                   <Error>Character not valid</Error>
@@ -228,7 +229,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding-top: 16px;
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 431px) {
     padding-top: 32px;
   }
 `;
