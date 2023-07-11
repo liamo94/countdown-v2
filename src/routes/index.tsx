@@ -1,9 +1,5 @@
 import { memo, type ReactNode } from "react";
-import {
-  Routes as _Routes,
-  Route,
-  BrowserRouter as Router,
-} from "react-router-dom";
+import { Routes as _Routes, BrowserRouter, Route } from "react-router-dom";
 import { Conundrum } from "../components/Conundrum";
 import { Countdown } from "../components/Countdown";
 import { LetterRound } from "../components/LetterRound";
@@ -35,8 +31,8 @@ export const Routes = memo(() => {
   ];
 
   return (
-    <Router>
+    <BrowserRouter>
       <_Routes children={routes} />
-    </Router>
+    </BrowserRouter>
   );
 });
