@@ -85,4 +85,8 @@ const Word = styled.p`
 
 const Container = styled.div`
   text-align: center;
+  padding-top: 16px;
+  @media screen and (max-width: 400px) {
+    padding-top: 32px;
+  }
 `;

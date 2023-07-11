@@ -73,7 +73,7 @@ export const LetterRound: FC = () => {
       const characters = (value ?? input).toUpperCase().split("");
       const userCharacters = [...chosenLetters];
       return characters.every((char) => {
-        if (userCharacters.includes(char)) {
+        if (!userCharacters.includes(char)) {
           return false;
         } else {
           userCharacters.splice(userCharacters.indexOf(char), 1);
@@ -143,8 +143,8 @@ export const LetterRound: FC = () => {
         {letterResponse.type === "ok" && (
           <>
             <p>Pick letters</p>
-            <button onClick={reset}>Reset</button>
-            <SquareContainer>
+            <ResetButton onClick={reset}>Reset</ResetButton>
+            <SquareContainer style={{ gap: "16px" }}>
               <Button buttonType="secondary" onClick={() => letterClicked("v")}>
                 Vowel
               </Button>
@@ -203,11 +203,16 @@ const Square = styled.div`
   font-weight: bold;
   margin: 2px;
   font-size: calc(40px + 2vmin);
-  width: 50px;
-  height: 50px;
+  width: 42px;
+  height: 42px;
   align-items: center;
   justify-content: center;
   display: flex;
+  @media screen and (max-width: 500px) {
+    padding: 4px;
+    width: 32px;
+    height: 32px;
+  }
 `;
 
 const SquareContainer = styled.div`
@@ -222,10 +227,20 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-top: 16px;
+  @media screen and (max-width: 400px) {
+    padding-top: 32px;
+  }
 `;
 
 const Error = styled.p`
   background: red;
   padding: 2px;
+  border-radius: 4px;
+`;
+
+const ResetButton = styled.button`
+  background: white;
+  border: none;
   border-radius: 4px;
 `;

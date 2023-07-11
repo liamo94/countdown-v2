@@ -11,4 +11,13 @@ export const Input = styled.input`
   box-shadow: 15px 15px 50px rgba(0, 0, 0, 0.5);
   border: 1px solid white;
   text-transform: uppercase;
+  @media screen and (max-width: 400px) {
+    width: 85%;
+    padding: 16px;
+    margin: 0;
+    font-size: 18px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
 `;

@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import styled from "styled-components";
 import { LinkButton } from "./LinkButton";
+import { createPortal } from "react-dom";
 
 export const Countdown: FC = () => {
   const letters = "COUNTDOWN".split("");
@@ -13,6 +14,17 @@ export const Countdown: FC = () => {
       </LetterContainer>
       <h1>Countdown app built in React</h1>
       <LinkButton to="/select">Select game</LinkButton>
+      <>
+        {createPortal(
+          <CodeLink
+            href="https://github.com/liamo94/countdown-v2"
+            target="_blank"
+          >
+            View code on GitHub
+          </CodeLink>,
+          document.body
+        )}
+      </>
     </Container>
   );
 };
@@ -51,4 +63,18 @@ const Container = styled.div`
   padding: 32px;
   text-align: center;
   position: relative;
+`;
+
+const CodeLink = styled.a`
+  position: absolute;
+  bottom: 16px;
+  text-align: center;
+  width: 100%;
+  font-size: 12px;
+  color: #aaa;
+  font-weight: 500;
+  text-decoration: none;
+  @media screen and (min-width: 500px) {
+    font-size: 16px;
+  }
 `;
