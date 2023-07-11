@@ -59,10 +59,13 @@ const StyledLetter = styled.div`
 
 const Container = styled.div`
   background-color: #282c34;
-  min-height: 100vh;
+  height: 80vh;
   padding: 32px;
   text-align: center;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 const CodeLink = styled.a`
