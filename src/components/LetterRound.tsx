@@ -1,9 +1,17 @@
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  type ChangeEvent,
+  type FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 
 import { checkWord } from "../utils/binarySearch";
 import { getConsonants } from "../utils/consonants";
-import { dictionary, Letters } from "../utils/dictionary";
+import { dictionary, type Letters } from "../utils/dictionary";
 import { random } from "../utils/random";
 import { useWindowEvent } from "../utils/useWindowEvent";
 import { getVowels } from "../utils/vowels";
@@ -43,7 +51,9 @@ export const LetterRound: FC = () => {
     let loaded = true;
     if (loaded)
       dictionary.getWords().then(setLetterResponse).catch(setLetterResponse);
-    return () => void (loaded = false);
+    return () => {
+      loaded = false;
+    };
   }, [setLetterResponse]);
 
   const letterClicked = useCallback(
@@ -63,7 +73,7 @@ export const LetterRound: FC = () => {
       const characters = (value ?? input).toUpperCase().split("");
       const userCharacters = [...chosenLetters];
       return characters.every((char) => {
-        if (userCharacters.indexOf(char) === -1) {
+        if (userCharacters.includes(char)) {
           return false;
         } else {
           userCharacters.splice(userCharacters.indexOf(char), 1);
@@ -88,7 +98,7 @@ export const LetterRound: FC = () => {
   }, [input, letterResponse.type, checkAnswer]);
 
   const handleKeyDown = useCallback(
-    (event) => {
+    (event: any) => {
       switch (event.keyCode) {
         case 67:
           letterClicked("c");
@@ -157,7 +167,7 @@ export const LetterRound: FC = () => {
                 <p>Now make a word</p>
                 <Input
                   ref={searchInput}
-                  onChange={(event) =>
+                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     handleInputChange(event.currentTarget.value)
                   }
                 />

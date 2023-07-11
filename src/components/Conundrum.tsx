@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useState, FC } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type FC,
+  type ChangeEvent,
+} from "react";
 import styled from "styled-components";
 import { conundrum } from "../utils/conundrum";
 import { random } from "../utils/random";
@@ -35,7 +41,7 @@ export const Conundrum: FC = () => {
         clearInterval(interval);
       }
     }, 20);
-    return () => void clearInterval(interval);
+    return () => clearInterval(interval);
   }, []);
 
   const checkWord = useCallback(
@@ -61,7 +67,9 @@ export const Conundrum: FC = () => {
             <Word>{word.scrambledWord.toUpperCase()}</Word>
             <Input
               maxLength={9}
-              onChange={(event) => checkWord(event.currentTarget.value)}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                checkWord(event.currentTarget.value)
+              }
             />
             {attempted && <p>{found ? "Correct" : "Incorrect"}</p>}
             {word.original}

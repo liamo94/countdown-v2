@@ -1,4 +1,4 @@
-import { useEffect, FC, useState } from "react";
+import { useEffect, type FC, useState } from "react";
 import styled from "styled-components";
 import { getRandomColor } from "../utils/randomColour";
 
@@ -25,7 +25,7 @@ export const Timer: FC<TimerProps> = ({ initialSeconds = 30, onTimeUp }) => {
         setStopped(true);
       }
     }, 1000);
-    return () => void clearInterval(intervalId);
+    return () => clearInterval(intervalId);
   }, [initialSeconds, onTimeUp, seconds, stopped]);
 
   return (

@@ -1,7 +1,7 @@
 export const sum = (e: string[], numbers: number[]) => {
   const s: number[] = [];
   for (const num of e) {
-    if (!isNaN(+num) && numbers.indexOf(+num) === -1 && num && num !== " ") {
+    if (!isNaN(+num) && numbers.includes(+num) && num && num !== " ") {
       return "Number not available";
     }
     if (num && num !== " " && !isNaN(+num)) {

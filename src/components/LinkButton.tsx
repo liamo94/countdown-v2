@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { LinkProps, NavLink } from "react-router-dom";
+import type { FC, PropsWithChildren } from "react";
+import { type LinkProps, NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 export interface LinkButtonProps {
@@ -7,7 +7,7 @@ export interface LinkButtonProps {
   type?: "primary" | "secondary";
 }
 
-export const LinkButton: FC<LinkButtonProps> = ({
+export const LinkButton: FC<PropsWithChildren<LinkButtonProps>> = ({
   children,
   to,
   type = "primary",

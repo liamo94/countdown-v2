@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, FC } from "react";
+import { useCallback, useEffect, useState, type FC } from "react";
 import styled from "styled-components";
 import { random } from "../utils/random";
 import { useWindowEvent } from "../utils/useWindowEvent";
@@ -34,7 +34,7 @@ export const NumberRound: FC = () => {
         clearInterval(interval);
       }
     }, 10);
-    return () => void clearInterval(interval);
+    return () => clearInterval(interval);
   }, [bigNumbers]);
 
   const selectRandomNumbers = (totalBigNumbers: number) => {
@@ -65,7 +65,7 @@ export const NumberRound: FC = () => {
   }, []);
 
   const handleKeyDown = useCallback(
-    (event) => {
+    (event: any) => {
       if (availableNumbers.length) return;
       console.log(event.keyCode);
       switch (event.keyCode) {

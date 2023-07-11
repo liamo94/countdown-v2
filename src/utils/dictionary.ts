@@ -22,10 +22,10 @@ class Dictionary {
       )
         .then((res) => res.json())
         .then((result) => {
-          resolve({ type: "ok", letters: Object.keys(result) });
+          return resolve({ type: "ok", letters: Object.keys(result) });
         })
         .catch((error) => {
-          reject({ type: "error", message: error.toString() });
+          return reject({ type: "error", message: error.toString() });
         });
     });
   }

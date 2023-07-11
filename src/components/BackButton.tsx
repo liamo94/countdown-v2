@@ -1,7 +1,7 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { Button, LinkButtonProps } from "./LinkButton";
+import { Button, type LinkButtonProps } from "./LinkButton";
 
 interface BackButtonProps {
   title?: string;

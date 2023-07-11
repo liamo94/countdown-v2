@@ -1,6 +1,6 @@
-import { ComponentType } from "react";
+import type { ComponentType } from "react";
 
-interface PageType {
+export interface PageType {
   title: string;
   component: ComponentType<any>;
   route: string;
