@@ -36,4 +36,9 @@ export const Button = styled.button<{ buttonType?: LinkButtonProps["type"] }>`
     cursor: default;
     background: grey;
   }
+
+  /* @media screen and (max-width: 400px) {
+    position: fixed;
+    top: 0%;
+  } */
 `;

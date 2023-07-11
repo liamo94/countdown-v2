@@ -40,6 +40,9 @@ const StyledLetter = styled.div`
     -ms-transform: scale(1.1);
     transform: scale(1.1);
   }
+  @media screen and (max-width: 400px) {
+    padding: 4px;
+  }
 `;
 
 const Container = styled.div`
@@ -47,4 +50,5 @@ const Container = styled.div`
   min-height: 100vh;
   padding: 32px;
   text-align: center;
+  position: relative;
 `;

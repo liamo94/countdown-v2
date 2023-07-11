@@ -10,7 +10,6 @@ import { conundrum } from "../utils/conundrum";
 import { random } from "../utils/random";
 import { BackButton } from "./BackButton";
 import { Input } from "./Input";
-import { Timer } from "./Timer";
 
 interface ConundrumWord {
   original: string;
@@ -72,10 +71,8 @@ export const Conundrum: FC = () => {
               }
             />
             {attempted && <p>{found ? "Correct" : "Incorrect"}</p>}
-            {word.original}
           </>
         )}
-        <Timer />
       </Container>
     </>
   );

@@ -134,6 +134,7 @@ const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 8px;
   > * {
     margin: 8px;
   }
@@ -164,10 +165,18 @@ const Input = styled.input`
   padding: 8px;
   width: 800px;
   font-size: calc(20px + 2vmin);
-  border-radius: 22px;
+  border-radius: 16px;
   padding: 4px 16px;
   margin: 20px;
   border: none;
   box-shadow: 15px 15px 50px rgba(0, 0, 0, 0.5);
   border: 1px solid white;
+  @media screen and (max-width: 400px) {
+    width: 85%;
+    padding: 16px;
+    margin: 0%;
+    font-size: 18px;
+    padding: 4px 8px;
+    border-radius: 8px;
+  }
 `;

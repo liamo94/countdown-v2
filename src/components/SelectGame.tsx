@@ -27,7 +27,11 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
+  padding-top: 16px;
   > * {
     margin: 16px;
+  }
+  @media screen and (max-width: 400px) {
+    padding-top: 32px;
   }
 `;
