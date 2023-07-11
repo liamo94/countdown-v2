@@ -21,4 +21,7 @@ export default defineConfig({
       "/authorization/": "...",
     },
   },
+  build: {
+    outDir: "./build",
+  },
 });
