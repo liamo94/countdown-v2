@@ -244,4 +244,5 @@ const ResetButton = styled.button`
   background: white;
   border: none;
   border-radius: 4px;
+  color: black;
 `;
