@@ -213,6 +213,7 @@ const Square = styled.div`
     padding: 4px;
     width: 32px;
     height: 32px;
+    font-size: 24px;
   }
 `;
 
@@ -229,6 +230,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding-top: 16px;
+  width: 100%;
   @media screen and (max-width: 431px) {
     padding-top: 32px;
   }

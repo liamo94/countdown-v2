@@ -3,7 +3,7 @@ import { Routes as _Routes, BrowserRouter, Route } from "react-router-dom";
 import { Conundrum } from "../components/Conundrum";
 import { Countdown } from "../components/Countdown";
 import { LetterRound } from "../components/LetterRound";
-import { NumberRound } from "../components/NumberRound";
+import { NumberRound } from "../components/number";
 import { SelectGame } from "../components/SelectGame";
 
 const homeRoute = <Route path="/" Component={Countdown} key="home" />;

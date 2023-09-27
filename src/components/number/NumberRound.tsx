@@ -1,26 +1,34 @@
-import { useCallback, useEffect, useState, type FC } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type FC,
+  type ChangeEvent,
+} from "react";
 import styled from "styled-components";
-import { random } from "../utils/random";
-import { useWindowEvent } from "../utils/useWindowEvent";
-import { BackButton } from "./BackButton";
-import { Button } from "./LinkButton";
+import { random } from "../../utils/random";
+import { useWindowEvent } from "../../utils/useWindowEvent";
+import { BackButton } from "../BackButton";
+import { Button } from "../LinkButton";
+import { infixToPostfix, sum } from "../../utils/numbers";
 
-// interface NumberState {
-//   value: number;
-//   validNumbers: boolean;
-//   validInput: boolean;
-//   invalidMessage?: string;
-// }
+interface NumberState {
+  value: number;
+  validNumbers: boolean;
+  validInput: boolean;
+  message?: string | number;
+  invalidMessage?: string;
+}
 
 export const NumberRound: FC = () => {
   const [randomNumber, setRandomNumber] = useState<number>();
   const [bigNumbers, setBigNumbers] = useState(0);
   const [availableNumbers, setAvailableNumbers] = useState<number[]>([]);
-  // const [valid, setValid] = useState<NumberState>({
-  //   value: 0,
-  //   validNumbers: true,
-  //   validInput: true,
-  // });
+  const [valid, setValid] = useState<NumberState>({
+    value: 0,
+    validNumbers: true,
+    validInput: true,
+  });
 
   useEffect(() => {
     const turns = 20;
@@ -87,6 +95,20 @@ export const NumberRound: FC = () => {
 
   useWindowEvent("keydown", handleKeyDown);
 
+  const handInput = useCallback(
+    (val: string) => {
+      const solution = sum(infixToPostfix(val), [...availableNumbers]);
+      setValid({
+        value: typeof solution === "number" ? solution : 0,
+        validInput: solution !== "Invalid input",
+        validNumbers: typeof solution === "number",
+        message: solution,
+      });
+    },
+    [availableNumbers]
+  );
+  console.log(valid);
+
   return (
     <>
       <BackButton route="/select" />
@@ -114,7 +136,13 @@ export const NumberRound: FC = () => {
                 <Number key={i}>{number}</Number>
               ))}
             </ButtonContainer>
-            <Input placeholder="Type solution" />
+            <Input
+              placeholder="Solution..."
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                handInput(e.target.value)
+              }
+            />
+            {!!valid.value && <p>{valid.value}</p>}
           </>
         )}
       </Container>
