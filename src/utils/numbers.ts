@@ -14,7 +14,7 @@ export const sum = (e: string[], numbers: number[]) => {
     else {
       const o2 = s.pop();
       const o1 = s.pop();
-      if (!o1 || !o2) break;
+      if (o1 === undefined || o2 === undefined) break;
       switch (t) {
         case "+":
           s.push(o1 + o2);

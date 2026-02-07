@@ -37,6 +37,7 @@ export const LetterRound: FC = () => {
   const consonants = useMemo(() => getConsonants(), []);
   const vowels = useMemo(() => getVowels(), []);
   const [points, setPoints] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
   const [valid, setValid] = useState<LetterState>({
     score: 0,
     correctAnswer: false,
@@ -49,8 +50,14 @@ export const LetterRound: FC = () => {
 
   useEffect(() => {
     let loaded = true;
-    if (loaded)
-      dictionary.getWords().then(setLetterResponse).catch(setLetterResponse);
+    dictionary
+      .getWords()
+      .then((res) => {
+        if (loaded) setLetterResponse(res);
+      })
+      .catch((err) => {
+        if (loaded) setLetterResponse(err);
+      });
     return () => {
       loaded = false;
     };
@@ -86,15 +93,18 @@ export const LetterRound: FC = () => {
 
   const checkAnswer = useCallback(() => {
     if (letterResponse.type !== "ok") return;
-    const wordValid = checkWord(letterResponse.letters, input);
+    const wordValid = checkWord(letterResponse.letters, input.toLowerCase());
     return wordValid;
   }, [letterResponse, input]);
 
   const isWordValid = useCallback(() => {
     if (letterResponse.type !== "ok") return;
-    checkAnswer()
-      ? setPoints(input.length === 8 ? 18 : input.length)
-      : setPoints(0);
+    setSubmitted(true);
+    if (checkAnswer()) {
+      setPoints(input.length === 8 ? 18 : input.length);
+    } else {
+      setPoints(0);
+    }
   }, [input, letterResponse.type, checkAnswer]);
 
   const handleKeyDown = useCallback(
@@ -121,6 +131,8 @@ export const LetterRound: FC = () => {
   const reset = useCallback(() => {
     setChosenLetters([]);
     setPoints(0);
+    setSubmitted(false);
+    setInput("");
   }, [setChosenLetters, setPoints]);
 
   const handleInputChange = useCallback(
@@ -181,7 +193,10 @@ export const LetterRound: FC = () => {
                 >
                   Submit
                 </Button>
-                {points > 0 && <h2>Correct, {points} points</h2>}
+                {submitted && points > 0 && <h2>Correct, {points} points</h2>}
+                {submitted && points === 0 && (
+                  <h2>Incorrect, word not found</h2>
+                )}
               </Container>
             )}
           </>

@@ -49,7 +49,7 @@ export const Conundrum: FC = () => {
         setAttempted(false);
       } else {
         setAttempted(true);
-        setFound(userWord === word.original);
+        setFound(userWord.toLowerCase() === word.original.toLowerCase());
       }
     },
     [word]

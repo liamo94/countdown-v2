@@ -1,33 +1,30 @@
-import { useCallback, useEffect, useState, type FC } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type FC,
+} from "react";
 import styled from "styled-components";
 import { random } from "../utils/random";
+import { infixToPostfix, sum } from "../utils/numbers";
 import { useWindowEvent } from "../utils/useWindowEvent";
 import { BackButton } from "./BackButton";
 import { Button } from "./LinkButton";
-
-// interface NumberState {
-//   value: number;
-//   validNumbers: boolean;
-//   validInput: boolean;
-//   invalidMessage?: string;
-// }
 
 export const NumberRound: FC = () => {
   const [randomNumber, setRandomNumber] = useState<number>();
   const [bigNumbers, setBigNumbers] = useState(0);
   const [availableNumbers, setAvailableNumbers] = useState<number[]>([]);
-  // const [valid, setValid] = useState<NumberState>({
-  //   value: 0,
-  //   validNumbers: true,
-  //   validInput: true,
-  // });
+  const [input, setInput] = useState("");
+  const [result, setResult] = useState<string | null>(null);
 
   useEffect(() => {
     const turns = 20;
     let i = 0;
     const interval = setInterval(() => {
       if (i < turns) {
-        const tempNumber = random(256);
+        const tempNumber = random(100, 1000);
         setRandomNumber(tempNumber);
         i++;
       } else {
@@ -43,11 +40,11 @@ export const NumberRound: FC = () => {
     const smallNumbers = [
       1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10,
     ];
-    const bigNumbers = [25, 50, 75, 100];
+    const bigNumberOptions = [25, 50, 75, 100];
     for (let i = 0; i < totalBigNumbers; i++) {
-      const rnd = random(bigNumbers.length);
-      selectedNumbers.push(bigNumbers[rnd]);
-      bigNumbers.splice(rnd, 1);
+      const rnd = random(bigNumberOptions.length);
+      selectedNumbers.push(bigNumberOptions[rnd]);
+      bigNumberOptions.splice(rnd, 1);
     }
     for (let i = 0; i < totalNumbers - totalBigNumbers; i++) {
       const rnd = random(smallNumbers.length);
@@ -62,6 +59,8 @@ export const NumberRound: FC = () => {
   const setAvailableNumber = useCallback((val: number) => {
     setAvailableNumbers(selectRandomNumbers(val));
     setBigNumbers(val);
+    setInput("");
+    setResult(null);
   }, []);
 
   const handleKeyDown = useCallback(
@@ -86,6 +85,27 @@ export const NumberRound: FC = () => {
   );
 
   useWindowEvent("keydown", handleKeyDown);
+
+  const handleSubmit = useCallback(() => {
+    if (!input.trim() || !randomNumber) return;
+    const postfix = infixToPostfix(input);
+    const numbers = [...availableNumbers];
+    const answer = sum(postfix, numbers);
+    if (typeof answer === "string") {
+      setResult(answer);
+    } else if (answer === randomNumber) {
+      setResult("Correct! 10 points");
+    } else {
+      const diff = Math.abs(answer - randomNumber);
+      if (diff <= 5) {
+        setResult(`${answer} - Close! 7 points (off by ${diff})`);
+      } else if (diff <= 10) {
+        setResult(`${answer} - Not bad! 5 points (off by ${diff})`);
+      } else {
+        setResult(`${answer} - Incorrect (off by ${diff})`);
+      }
+    }
+  }, [input, randomNumber, availableNumbers]);
 
   return (
     <>
@@ -114,7 +134,23 @@ export const NumberRound: FC = () => {
                 <Number key={i}>{number}</Number>
               ))}
             </ButtonContainer>
-            <Input placeholder="Type solution" />
+            <small>
+              Use spaces between numbers and operators (e.g. 100 + 25 * 3)
+            </small>
+            <Input
+              placeholder="Type solution"
+              value={input}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                setInput(event.currentTarget.value)
+              }
+              onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
+                if (event.key === "Enter") handleSubmit();
+              }}
+            />
+            <Button onClick={handleSubmit} disabled={!input.trim()}>
+              Submit
+            </Button>
+            {result && <Result>{result}</Result>}
           </>
         )}
       </Container>
@@ -182,4 +218,10 @@ const Input = styled.input`
     padding: 4px 8px;
     border-radius: 8px;
   }
+`;
+
+const Result = styled.p`
+  font-size: calc(14px + 1vmin);
+  color: #90ee90;
+  margin-top: 16px;
 `;

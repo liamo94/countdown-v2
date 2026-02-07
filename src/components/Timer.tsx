@@ -15,18 +15,20 @@ export const Timer: FC<TimerProps> = ({ initialSeconds = 30, onTimeUp }) => {
   useEffect(() => {
     if (stopped) return;
     const intervalId = setInterval(() => {
-      if (seconds !== 0) {
-        setSeconds((s) => s - 1);
-        setColour(getRandomColor());
-      } else {
-        setSeconds(initialSeconds);
-        onTimeUp?.();
-        clearInterval(intervalId);
-        setStopped(true);
-      }
+      setSeconds((s) => {
+        if (s > 1) {
+          setColour(getRandomColor());
+          return s - 1;
+        } else {
+          onTimeUp?.();
+          clearInterval(intervalId);
+          setStopped(true);
+          return initialSeconds;
+        }
+      });
     }, 1000);
     return () => clearInterval(intervalId);
-  }, [initialSeconds, onTimeUp, seconds, stopped]);
+  }, [initialSeconds, onTimeUp, stopped]);
 
   return (
     <Container border={colour}>

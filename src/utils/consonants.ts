@@ -1,6 +1,6 @@
 export const getConsonants = () => {
   const consonants: string[] = [];
-  for (let i = 0; i <= 66; i++) {
+  for (let i = 0; i <= 74; i++) {
     if (i <= 1) {
       consonants.push("B");
     } else if (i > 1 && i <= 4) {
