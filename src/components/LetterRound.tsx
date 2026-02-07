@@ -46,7 +46,7 @@ export const LetterRound: FC = () => {
 
   const searchInput = useRef<HTMLInputElement | null>(null);
 
-  const LETTER_LIMIT = 7;
+  const MAX_LETTERS = 8;
 
   useEffect(() => {
     let loaded = true;
@@ -65,7 +65,7 @@ export const LetterRound: FC = () => {
 
   const letterClicked = useCallback(
     (letter: "c" | "v") => {
-      if (chosenLetters.length <= LETTER_LIMIT) {
+      if (chosenLetters.length < MAX_LETTERS) {
         setChosenLetters([
           ...chosenLetters,
           random(letter === "c" ? consonants : vowels),
@@ -109,6 +109,7 @@ export const LetterRound: FC = () => {
 
   const handleKeyDown = useCallback(
     (event: any) => {
+      if (letterResponse.type !== "ok") return;
       switch (event.keyCode) {
         case 67:
           letterClicked("c");
@@ -123,7 +124,7 @@ export const LetterRound: FC = () => {
           break;
       }
     },
-    [letterClicked, isWordValid]
+    [letterClicked, isWordValid, letterResponse.type]
   );
 
   useWindowEvent("keydown", handleKeyDown);
@@ -146,6 +147,7 @@ export const LetterRound: FC = () => {
   return (
     <>
       <BackButton route="/select" />
+      <ResetButton onClick={reset}>Reset</ResetButton>
       <Container>
         <h1>Letter round</h1>
         {letterResponse.type === "loading" && <p>Loading...</p>}
@@ -154,50 +156,71 @@ export const LetterRound: FC = () => {
         )}
         {letterResponse.type === "ok" && (
           <>
-            <p>Pick letters</p>
-            <ResetButton onClick={reset}>Reset</ResetButton>
-            <SquareContainer style={{ gap: "16px" }}>
-              <Button buttonType="secondary" onClick={() => letterClicked("v")}>
+            <Subtitle>
+              {chosenLetters.length >= MAX_LETTERS
+                ? "Now make a word"
+                : `Pick ${MAX_LETTERS - chosenLetters.length} more letter${
+                    MAX_LETTERS - chosenLetters.length !== 1 ? "s" : ""
+                  }`}
+            </Subtitle>
+            <ButtonContainer>
+              <Button
+                buttonType="secondary"
+                onClick={() => letterClicked("v")}
+                disabled={chosenLetters.length >= MAX_LETTERS}
+              >
                 Vowel
               </Button>
-              <Button buttonType="secondary" onClick={() => letterClicked("c")}>
+              <Button
+                buttonType="secondary"
+                onClick={() => letterClicked("c")}
+                disabled={chosenLetters.length >= MAX_LETTERS}
+              >
                 Consonant
               </Button>
-            </SquareContainer>
-            <small>
-              <b>Tip</b>: Use <b>V</b> and <b>C</b> to add vowels and consonants
-            </small>
-            <SquareContainer>
+            </ButtonContainer>
+            <Tip>
+              Press <Key>V</Key> or <Key>C</Key> to add letters
+            </Tip>
+            <LetterTiles>
               {[...Array(8)].map((_, i) => (
-                <Square key={i}>
-                  <Inner>{chosenLetters[i] ?? ""}</Inner>
-                </Square>
+                <Square key={i}>{chosenLetters[i] ?? ""}</Square>
               ))}
-            </SquareContainer>
-            {chosenLetters.length > LETTER_LIMIT && (
-              <Container>
-                <p>Now make a word</p>
+            </LetterTiles>
+            {chosenLetters.length >= MAX_LETTERS && (
+              <>
                 <Input
                   ref={searchInput}
+                  value={input}
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     handleInputChange(event.currentTarget.value)
                   }
                   maxLength={8}
                 />
-                {!valid.allValidCharacters && (
-                  <Error>Character not valid</Error>
-                )}
                 <Button
                   onClick={() => isWordValid()}
                   disabled={!input || !valid.allValidCharacters}
                 >
                   Submit
                 </Button>
-                {submitted && points > 0 && <h2>Correct, {points} points</h2>}
-                {submitted && points === 0 && (
-                  <h2>Incorrect, word not found</h2>
-                )}
-              </Container>
+                <Feedback>
+                  {!valid.allValidCharacters && (
+                    <FeedbackText correct={false}>
+                      Character not in your letters
+                    </FeedbackText>
+                  )}
+                  {submitted && points > 0 && (
+                    <FeedbackText correct>
+                      Correct, {points} points
+                    </FeedbackText>
+                  )}
+                  {submitted && points === 0 && (
+                    <FeedbackText correct={false}>
+                      Incorrect, word not found
+                    </FeedbackText>
+                  )}
+                </Feedback>
+              </>
             )}
           </>
         )}
@@ -206,9 +229,34 @@ export const LetterRound: FC = () => {
   );
 };
 
-const Inner = styled.div`
+const Container = styled.div`
+  text-align: center;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  padding-top: 16px;
+  gap: 16px;
+  @media screen and (max-width: 500px) {
+    padding-top: 32px;
+    gap: 24px;
+  }
+  h1 {
+    margin: 0;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
   justify-content: center;
+  gap: 16px;
+`;
+
+const LetterTiles = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 4px;
 `;
 
 const Square = styled.div`
@@ -217,7 +265,6 @@ const Square = styled.div`
   background-color: #008296;
   padding: 10px;
   font-weight: bold;
-  margin: 2px;
   font-size: calc(40px + 2vmin);
   width: 42px;
   height: 42px;
@@ -225,39 +272,57 @@ const Square = styled.div`
   justify-content: center;
   display: flex;
   @media screen and (max-width: 500px) {
-    padding: 4px;
-    width: 32px;
-    height: 32px;
+    padding: 6px;
+    width: 28px;
+    height: 28px;
+    font-size: calc(24px + 2vmin);
   }
 `;
 
-const SquareContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  padding: 16px;
+const Subtitle = styled.p`
+  font-size: 18px;
+  color: #aaa;
+  margin: 0;
 `;
 
-const Container = styled.div`
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 16px;
-  @media screen and (max-width: 431px) {
-    padding-top: 32px;
+const Tip = styled.small`
+  color: #777;
+  font-size: 13px;
+`;
+
+const Key = styled.span`
+  background: #444;
+  color: white;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 12px;
+`;
+
+const Feedback = styled.div`
+  min-height: 32px;
+`;
+
+const FeedbackText = styled.p<{ correct: boolean }>`
+  color: ${({ correct }) => (correct ? "#90ee90" : "#ff7676")};
+  font-size: 18px;
+  margin: 0;
+`;
+
+const ResetButton = styled(Button)`
+  position: absolute;
+  right: 0;
+  margin: 8px 16px;
+  font-size: 20px;
+  &,
+  &:hover,
+  &:active,
+  &:focus {
+    border: none;
+    background: none;
+    color: #ff7676;
   }
-`;
-
-const Error = styled.p`
-  background: red;
-  padding: 2px;
-  border-radius: 4px;
-`;
-
-const ResetButton = styled.button`
-  background: white;
-  border: none;
-  border-radius: 4px;
-  color: black;
+  &:hover {
+    color: #ff9191;
+  }
 `;

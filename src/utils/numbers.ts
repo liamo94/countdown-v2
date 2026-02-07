@@ -26,6 +26,7 @@ export const sum = (e: string[], numbers: number[]) => {
           s.push(o1 * o2);
           break;
         case "/":
+          if (o2 === 0 || o1 % o2 !== 0) return "Division must be exact";
           s.push(o1 / o2);
           break;
         default:
@@ -41,7 +42,7 @@ export const sum = (e: string[], numbers: number[]) => {
 
 export const infixToPostfix = (input: string) => {
   const precedences = ["-", "+", "*", "/"];
-  const infix = input.split(" ");
+  const infix = input.trim().split(/\s+/);
 
   const opsStack: string[] = [];
   const postfix: string[] = [];

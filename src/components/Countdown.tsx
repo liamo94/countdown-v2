@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { LinkButton } from "./LinkButton";
 import { createPortal } from "react-dom";
 
@@ -9,7 +9,7 @@ export const Countdown: FC = () => {
     <Container>
       <LetterContainer>
         {letters.map((letter, i) => (
-          <Letter letter={letter} key={i} />
+          <Letter letter={letter} index={i} key={i} />
         ))}
       </LetterContainer>
       <h1>Countdown app built in React</h1>
@@ -29,27 +29,34 @@ export const Countdown: FC = () => {
   );
 };
 
-const Letter: FC<{ letter: string }> = ({ letter }) => (
-  <StyledLetter>{letter}</StyledLetter>
+const Letter: FC<{ letter: string; index: number }> = ({ letter, index }) => (
+  <StyledLetter $index={index}>{letter}</StyledLetter>
 );
+
+const wave = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+`;
 
 const LetterContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
 
-const StyledLetter = styled.div`
+const StyledLetter = styled.div<{ $index: number }>`
   border: 1px solid white;
   color: white;
   background-color: #008296;
   padding: 10px;
   font-weight: bold;
-  float: left;
   margin: 2px;
   font-size: calc(20px + 2vmin);
+  animation: ${wave} 0.4s ease-in-out ${({ $index }) => $index * 0.06}s;
   &:hover {
-    -webkit-transform: scale(1.1);
-    -ms-transform: scale(1.1);
     transform: scale(1.1);
   }
   @media screen and (max-width: 431px) {
